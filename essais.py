@@ -99,9 +99,9 @@ def domaine_commun(Ya,Yb):
 Y5 = np.cos(X)
 Y6 = taylor2(X,np.cos,0)
 
-plt.plot(X,Y5)
-plt.plot(X,Y6)
-plt.show()
+#plt.plot(X,Y5)
+#plt.plot(X,Y6)
+#plt.show()
 # -> Le degré 0 approxime la fonction par une valeur constante, ici égale à np.cos(0.)
 
 
@@ -111,6 +111,10 @@ def custom(x):
 
 Y7 = np.vectorize(custom)(X) #on ne la vectorialise qu'ici
 Y8 = taylor2(X,custom,14)
+
+#plt.plot(X,Y7)
+#plt.plot(X,Y8)
+#plt.show()
 
 domaine_commun(Y7,Y8)
 #-> 61.5%
