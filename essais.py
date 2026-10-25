@@ -87,10 +87,13 @@ Y4 = taylor2(X, np.sin, 10)
 #plt.plot(X,Y4)
 #plt.show()
 
-DIFF=np.absolute(Y4-Y3)
-Iproche= [i for i in range(len(X)) if DIFF[i]<1e-3 ]
+def domaine_commun(Ya,Yb):
+    DIFF=np.absolute(Ya-Yb)
+    I_PROCHE= [i for i in range(len(X)) if DIFF[i]<1e-3 ]
+    print(f"La proportion du domaine où les courbes sont égales à 10^-3 près est: {len(I_PROCHE)*100/len(Ya)}%.")
+    return
 
-#print(f"La proportion du domaine où les courbes sont égales à 10^-3 près est: {len(Iproche)*100/len(X)}%.")
+#domaine_commun(Y3,Y4)
 #-> 42%
 
 Y5 = np.cos(X)
@@ -100,3 +103,14 @@ plt.plot(X,Y5)
 plt.plot(X,Y6)
 plt.show()
 # -> Le degré 0 approxime la fonction par une valeur constante, ici égale à np.cos(0.)
+
+
+def custom(x):
+    """retourne 2 * sin(X) + cos(X/4)"""
+    return 2*np.sin(x)+np.cos(x/4) #on doit la définir en version scalaire pour pouvoir la dériver
+
+Y7 = np.vectorize(custom)(X) #on ne la vectorialise qu'ici
+Y8 = taylor2(X,custom,14)
+
+domaine_commun(Y7,Y8)
+#-> 61.5%
