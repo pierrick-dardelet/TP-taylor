@@ -53,7 +53,7 @@ with st.sidebar:
 st.subheader("APPROXIMATION DE FONCTIONS")
 st.write("Cet outil utilise l'approximation de Taylor, qui s'écrit à l'ordre n:")
 st.latex("P_n(x)=\sum_{k=0}^n\dfrac{f^{(k)}(0)}{k!}x^k")
-n=st.slider("A quel ordre?",0,10,3)
+n=st.slider("A quel ordre?",0,10,3,key='ordre')
 l=st.slider("Sur quelle largeur d'intervalle centré en 0?",2.,20.,12.6,0.01)
 
 f=FONCTIONS[fname]
@@ -95,3 +95,27 @@ if case:
     ax2.semilogy()
     ax2.legend()
     st.pyplot(fig2)
+
+# 6. Comparer plusieurs ordres
+
+st.subheader('COMPARAISON DE PLUSIEURS ORDRES')
+bouton = st.button("Ajouter cet ordre à la comparaison")
+reset = st.button("Réinitialisation")
+
+if "A_comparer" not in st.session_state.keys():
+    st.session_state['A_comparer']=[]
+
+if bouton and n not in st.session_state['A_comparer']:
+    st.session_state['A_comparer'].append(n)
+
+if reset:
+    st.session_state['A_comparer']=[]
+
+#print(st.session_state) #-> Evite bien les doublons et persiste bien entre deux exécutions.
+
+fig3,ax3=plt.subplots()
+ax3.plot(X,Y,label='f')
+for ordre in st.session_state['A_comparer']:
+    ax3.plot(X,taylor2(X,f,ordre),label=f'P_{ordre}')
+ax3.legend()
+st.pyplot(fig3)
