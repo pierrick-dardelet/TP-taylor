@@ -48,6 +48,7 @@ FONCTIONS={"sinus":np.sin,"cosinus":np.cos,"exponentielle":np.exp,"logarithme ne
 st.title("Approximation de Taylor")
 with st.sidebar:
     fname=st.selectbox("Quelle fonction approximer?",FONCTIONS)
+    log10seuil=st.slider("Quel seuil de tolérance en précision en log10?",-6.,-2.,-3.,step=0.1)
 
 st.subheader("APPROXIMATION DE FONCTIONS")
 st.write("Cet outil utilise l'approximation de Taylor, qui s'écrit à l'ordre n:")
@@ -69,3 +70,28 @@ st.pyplot(fig)
 # La qualité d'approximation empire à mesure qu'on s'éloigne de 0.
 # Au-delà de abs(x)=1, l'approximation s'écarte de la fonction à mesure que n augmente.
 # Cohérent avec le rayon de la série entière qui vaut 1.
+
+
+
+#5. Qualité d'approximation
+
+seuil=np.exp(log10seuil*np.log(10))
+
+def taux_coincidence(Ya,Yb,seuil):
+    DIFF=np.absolute(Ya-Yb)
+    I_PROCHE= [i for i in range(len(X)) if DIFF[i]<seuil ]
+    return len(I_PROCHE)/len(Ya)
+
+st.write(f"Avec le seuil choisi à {seuil:.2g}, l'approximation coïncide avec la fonction sur {round(taux_coincidence(Y,Y_taylor,seuil)*100,3)}% du domaine affiché.")
+
+# Cf tests pour 5.1 dans essais.py: nan<1e-3 vaut False
+# Donc tout le domaine affiché où la fonction n'est pas définie compte comme "ne coïncidant pas" (ce qui est raisonnable) et abaisse le taux renvoyé.
+
+case=st.checkbox("Afficher l'erreur")
+
+if case:
+    fig2,ax2=plt.subplots()
+    ax2.plot(X,np.absolute(Y_taylor-Y),label="écart |f-Pn|")
+    ax2.semilogy()
+    ax2.legend()
+    st.pyplot(fig2)

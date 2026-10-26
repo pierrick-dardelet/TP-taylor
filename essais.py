@@ -118,3 +118,10 @@ Y8 = taylor2(X,custom,14)
 
 domaine_commun(Y7,Y8)
 #-> 61.5%
+
+
+#Test sur les nan pour 5.1
+
+print(np.log(X+1)) #On a bien des nan là où ln(.+1) n'est pas définie
+print(np.abs(np.log(X+1))) #Quand on compare à la fonction nulle par exemple, on a aussi des nan aux mêmes endroits.
+print(np.abs(np.log(X+1))[0]<1e-3) #Le booléen nan<1e-3 vaut False.
